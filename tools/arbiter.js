@@ -9987,7 +9987,7 @@ function summaryLine(a) {
   }
 }
 function main() {
-  const policyPath = getFlag("--policy", ".sentry/policy.yaml");
+  const policyPath = getFlag("--policy", ".arbiter/policy.yaml");
   const provenancePath = getFlag("--provenance", ".ai/provenance.json");
   const artifactOut = getFlag("--artifact-out", "./arbiter-artifact.json");
   const hmacSecret = getFlag("--hmac-secret", process.env.ARBITER_HMAC_SECRET);

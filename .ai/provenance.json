@@ -1,0 +1,10 @@
+{
+  "session_id": "sess_8f21c4",
+  "agent": "Claude Code",
+  "model": "claude-opus",
+  "user": "dean@payments.example.com",
+  "files_modified": [
+    "payments/settlement.py"
+  ],
+  "generated_at": "2026-05-26T14:02:11Z"
+}

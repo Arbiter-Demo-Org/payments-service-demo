@@ -1,0 +1,29 @@
+version: "1.0.0"
+
+provenance:
+  required: true
+  required_fields:
+    - session_id
+    - agent
+    - files_modified
+    - generated_at
+  artifact_path: ".ai/provenance.json"
+
+protected_paths:
+  - pattern: "payments/**"
+    label: "Payment settlement"
+    risk_class: "high"
+
+evidence_requirements:
+  - path_pattern: "payments/**"
+    required_artifacts:
+      - type: "change_ticket"
+        path: ".ai/evidence/change-ticket.json"
+
+# Promotion of changes to payments/** is governed by evidence presence:
+#   no change-ticket evidence  -> DENY  (EVIDENCE_MISSING)
+#   change-ticket present       -> ALLOW (CONDITIONS_SATISFIED)
+escalation_conditions: []
+
+failure_defaults:
+  protected_path_unavailable_input: "DENY"

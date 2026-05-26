@@ -1,0 +1,14 @@
+{
+  "ticket_id": "CHG-20418",
+  "system": "ServiceNow",
+  "title": "Adjust payout retry threshold for settlement failures",
+  "status": "Approved",
+  "approved_by": "m.okafor@payments.example.com",
+  "approver_role": "Payments Engineering Manager",
+  "approved_at": "2026-05-26T13:58:42Z",
+  "change_window": "2026-05-26T22:00:00Z/2026-05-26T23:00:00Z",
+  "risk": "high",
+  "related_paths": [
+    "payments/settlement.py"
+  ]
+}

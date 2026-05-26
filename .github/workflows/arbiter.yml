@@ -1,0 +1,29 @@
+name: Arbiter
+
+# Deterministic authorization for AI-originated changes, evaluated before merge.
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+  pull-requests: write
+  checks: write
+
+jobs:
+  authorize:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      # Point this at your published Arbiter action (the control-plane repo).
+      # e.g. uses: your-org/arbiter@v1
+      - name: Arbiter authorization
+        uses: your-org/arbiter@v1
+        with:
+          policy-path: .sentry/policy.yaml
+          provenance-path: .ai/provenance.json
+          rollout-mode: enforce
+          hmac-secret: ${{ secrets.ARBITER_HMAC_SECRET }}

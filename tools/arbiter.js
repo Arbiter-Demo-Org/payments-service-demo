@@ -9543,16 +9543,6 @@ function loadPolicy(path2) {
 
 // src/artifact/emit.ts
 var fs4 = __toESM(require("fs"));
-
-// src/artifact/hmac.ts
-var crypto4 = __toESM(require("crypto"));
-function computeHmac(artifact, secret) {
-  const { hmac: _, ...withoutHmac } = artifact;
-  const canonical = canonicalizeJson(withoutHmac);
-  return crypto4.createHmac("sha256", secret).update(canonical).digest("hex");
-}
-
-// src/artifact/emit.ts
 function buildArtifact(inputs) {
   const artifact = {
     event_id: inputs.context.event_id ?? "unknown",
@@ -9588,9 +9578,6 @@ function buildArtifact(inputs) {
   }
   if (inputs.failureContext) {
     artifact.failure_context = inputs.failureContext;
-  }
-  if (inputs.hmacSecret) {
-    artifact.hmac = computeHmac(artifact, inputs.hmacSecret);
   }
   return artifact;
 }
@@ -9866,7 +9853,6 @@ function evaluate(inputs) {
         policyVersion: "unknown",
         policyDigest: POLICY_DIGEST_UNAVAILABLE,
         rolloutMode: inputs.rolloutMode,
-        hmacSecret: inputs.hmacSecret,
         failureContext
       });
       writeArtifact(artifact2, inputs.artifactOutputPath);
@@ -9920,7 +9906,6 @@ function evaluate(inputs) {
     policyVersion,
     policyDigest,
     rolloutMode: inputs.rolloutMode,
-    hmacSecret: inputs.hmacSecret,
     failureContext
   });
   writeArtifact(artifact, inputs.artifactOutputPath);
@@ -9987,10 +9972,9 @@ function summaryLine(a) {
   }
 }
 function main() {
-  const policyPath = getFlag("--policy", ".arbiter/policy.yaml");
+  const policyPath = getFlag("--policy", ".sentry/policy.yaml");
   const provenancePath = getFlag("--provenance", ".ai/provenance.json");
   const artifactOut = getFlag("--artifact-out", "./arbiter-artifact.json");
-  const hmacSecret = getFlag("--hmac-secret", process.env.ARBITER_HMAC_SECRET);
   const repository = getFlag("--repo", path.basename(process.cwd()));
   const explicitChanged = getFlag("--changed");
   const base = getFlag("--base");
@@ -10010,12 +9994,10 @@ function main() {
     provenancePath,
     rolloutMode: "enforce",
     artifactOutputPath: artifactOut,
-    hmacSecret,
     githubToken: "",
     contextOverride: context
   });
   const a = result.artifact;
-  const sig = a.hmac ? `  ${C.dim}sig:${a.hmac.slice(0, 12)}${C.reset}` : "";
   process.stdout.write("\n");
   process.stdout.write(`  ${C.bold}ARBITER${C.reset}  ${C.dim}\xB7  ${repository}${C.reset}
 
@@ -10025,7 +10007,7 @@ function main() {
   process.stdout.write(`  ${summaryLine(a)}
 
 `);
-  process.stdout.write(`  ${C.dim}artifact:${C.reset} ${artifactOut}${sig}
+  process.stdout.write(`  ${C.dim}artifact:${C.reset} ${artifactOut}
 
 `);
   process.exit(result.conclusion === "failure" ? 1 : 0);

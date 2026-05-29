@@ -26,4 +26,3 @@ jobs:
           policy-path: .sentry/policy.yaml
           provenance-path: .ai/provenance.json
           rollout-mode: enforce
-          hmac-secret: ${{ secrets.ARBITER_HMAC_SECRET }}

@@ -4,6 +4,6 @@
   "private": true,
   "description": "Demo payments service governed by Arbiter at the promotion boundary.",
   "scripts": {
-    "evaluate": "node tools/arbiter.js --repo payments-service --hmac-secret demo-secret"
+    "evaluate": "node tools/arbiter.js --repo payments-service"
   }
 }

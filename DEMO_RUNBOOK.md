@@ -18,6 +18,9 @@ not *"impressive architecture."*
 - Terminal: dark theme, large font, high contrast, **single pane** (no tmux/splits).
 - If the Arbiter CLI bundle ever needs rebuilding:
   `cd ../control-plane && npm run build:standalone && cp dist-standalone/cli.js ../payments-service-demo/tools/arbiter.js`
+- Migration transient: until the control-plane HMAC-removal Phase 3 re-vendor lands,
+  `tools/arbiter.js` may still print a legacy `sig:` suffix. Do not use that suffix
+  as demo truth; rely on decision/rationale lines.
 
 ### Reset to a clean take
 ```bash
@@ -58,9 +61,9 @@ Output (instant, <0.2s):
   DECISION   DENIED
   Protected path payments/** requires change_ticket evidence before merge.
 
-  artifact: ./arbiter-artifact.json  sig:a1074efe2dcd
+  artifact: ./arbiter-artifact.json
 ```
-The signed artifact / decision are **visible but not narrated**.
+The artifact path / decision are **visible but not narrated**.
 
 **VO:** "Arbiter requires authorization before this can merge."
 
@@ -90,7 +93,7 @@ npm run evaluate
   DECISION   ALLOWED
   Authorization satisfied for payments/** — required evidence present.
 
-  artifact: ./arbiter-artifact.json  sig:183020b13d58
+  artifact: ./arbiter-artifact.json
 ```
 Hold on the ALLOW slightly longer than the DENY — this is what keeps Arbiter from
 feeling anti-velocity.
@@ -103,7 +106,7 @@ feeling anti-velocity.
 
 ## Narration & visual discipline
 - Spoken lines carry ONE idea: *Arbiter made an authoritative decision before
-  promotion.* Don't say "signed artifact," "reason code," "deterministic" in a row
+  promotion.* Don't say "artifact details," "reason code," "deterministic" in a row
   — they're on-screen credibility, not voiceover.
 - The blocked state appears instantly — no waiting, scrolling, or intermediate logs.
 - Provenance (`.ai/provenance.json`) stays quiet in the background — never narrated.
@@ -120,7 +123,7 @@ also show a real blocked merge:
 
 1. Publish the Arbiter action (the `control-plane` repo) and update
    `.github/workflows/arbiter.yml` (`uses: <your-org>/arbiter@<tag>`).
-2. Push this repo to GitHub; add a repo secret `ARBITER_HMAC_SECRET`.
+2. Push this repo to GitHub.
 3. Branch protection on `main`: require the **Arbiter** status check.
 4. Open the PR from the agent's branch → the Arbiter check fails → **merge
    blocked**. Push the change-ticket file → check passes → merge enabled.

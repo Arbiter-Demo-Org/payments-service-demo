@@ -23,6 +23,6 @@ jobs:
       - name: Arbiter authorization
         uses: your-org/arbiter@v1
         with:
-          policy-path: .sentry/policy.yaml
+          policy-path: .arbiter/policy.yaml
           provenance-path: .ai/provenance.json
           rollout-mode: enforce

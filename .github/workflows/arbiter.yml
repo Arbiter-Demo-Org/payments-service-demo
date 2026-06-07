@@ -21,7 +21,7 @@ jobs:
       # Point this at your published Arbiter action (the control-plane repo).
       # e.g. uses: your-org/arbiter@v1
       - name: Arbiter authorization
-        uses: your-org/arbiter@v1
+        uses: deanlockgaard/control-plane@main
         with:
           policy-path: .arbiter/policy.yaml
           provenance-path: .ai/provenance.json
